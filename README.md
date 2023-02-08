@@ -5,9 +5,12 @@
 **Build and Run**
 
 ```
+### To build using CMAKE
 mkdir build
 cmake -B ./build
 cmake --build ./build
+
+### To run
 ./build/Matrix
 
 ```
@@ -34,3 +37,12 @@ An implementation of a generic class called Matrix which is a template class tha
 -   `size_t row() const`: returns the number of rows in the matrix.
 -   `size_t column() const`: returns the number of columns in the matrix.
 -   `void print()`: prints the matrix to the console.
+
+**Non-member functions and operators**
+
+-   `Matrix<T> operator+(const Matrix<T> &first, const Matrix<T> &second)`: overloads the + operator by taking two constant references to Matrix objects as input, and returns the addition result as a new object.
+-   `Matrix<T> operator*(const Matrix<T> &first, const Matrix<T> &second)`: overloads the \* operator by taking two constant references to Matrix objects as input, and returns the multiplication result as a new object.
+
+**Tests**
+
+The `main.cpp` includes tests for the basic operations of the Matrix class.
