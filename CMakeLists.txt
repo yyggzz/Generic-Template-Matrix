@@ -1,0 +1,5 @@
+set (CMAKE_CXX_STANDARD 20)
+cmake_minimum_required(VERSION 3.24.2)
+project(Matrix)
+add_executable(Matrix main.cpp Matrix.hpp)
+set(CMAKE_BUILD_TYPE Debug)
