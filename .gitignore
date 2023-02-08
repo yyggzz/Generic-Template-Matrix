@@ -1,0 +1,9 @@
+##### CMake
+build
+CMakeLists.txt
+
+#### Mac
+.DS_Store
+
+#### Binary
+a.out
