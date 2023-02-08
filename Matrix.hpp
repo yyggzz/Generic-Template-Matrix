@@ -1,3 +1,7 @@
+/*
+Copyright (c) 2023 Yige Zhang. All rights reserved.
+*/
+
 #pragma once
 #include <iostream>
 #include <memory>
