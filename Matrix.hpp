@@ -7,10 +7,10 @@
 template <typename T>
 class Matrix {
    public:
-    Matrix(size_t row, size_t column);           // constructor
-    Matrix(size_t row, size_t column, T value);  // constructor with single value
-    Matrix(std::vector<std::vector<T>> values);  // constructor with vector of vectors of values
-    Matrix(const Matrix &source);                // copy constructor;
+    Matrix(size_t row, size_t column);                  // constructor
+    Matrix(size_t row, size_t column, T value);         // constructor with single value
+    Matrix(const std::vector<std::vector<T>> &values);  // constructor with vector of vectors
+    Matrix(const Matrix &source);                       // copy constructor;
 
     T &operator[](size_t index);                 // overloading [], access 1D element
     bool operator==(const Matrix &other) const;  // overloading == operator
@@ -48,6 +48,18 @@ Matrix<T>::Matrix(size_t row, size_t column, T value) : Matrix(row, column) {
     for (int r = 0; r < row; r++) {
         for (int c = 0; c < column; c++) {
             set(r, c, value);
+        }
+    }
+}
+
+// constructor with vector of vectors of values
+template <typename T>
+Matrix<T>::Matrix(const std::vector<std::vector<T>> &values)
+    : Matrix(values.size(), values[0].size()) {
+    std::cout << "Constructor with vector of vectors." << std::endl;
+    for (int r = 0; r < row(); r++) {
+        for (int c = 0; c < column(); c++) {
+            set(r, c, values[r][c]);
         }
     }
 }
@@ -110,29 +122,35 @@ Matrix<T> operator+(const Matrix<T> &first, const Matrix<T> &second) {
 // overloading *=
 template <typename T>
 Matrix<T> &Matrix<T>::operator*=(const Matrix &other) {
-    if (m_column != other.row()) throw std::invalid_argument("Incompatible matrix size for *");
-
-    Matrix<T> copy = *this;
-    for (int r = 0; r < m_row; r++) {
-        for (int c = 0; c < other.column(); c++) {
-            T tmp = 0;
-            for (int i = 0; i < other.row(); i++) {
-                tmp += copy.get(r, i) * other.get(i, c);
-            }
-            set(r, c, tmp);
-        }
-    }
     std::cout << "Overloading *= operator" << std::endl;
+    if (column() != other.row()) throw std::invalid_argument("Incompatible matrix size for *=");
+    Matrix<T> copy = *this;
+    m_column = other.column();
+    *this = copy * other;
     return *this;
 }
 
 // overloading *
 template <typename T>
 Matrix<T> operator*(const Matrix<T> &first, const Matrix<T> &second) {
-    Matrix<T> tmp = first;
-    tmp *= second;
     std::cout << "Overloading * operator" << std::endl;
-    return tmp;
+    const int row = first.row();
+    const int column = second.column();
+    const int n = first.column();
+    if (second.row() != n) throw std::invalid_argument("Incompatible matrix size for *");
+
+    Matrix<T> result(row, column);
+    for (int r = 0; r < row; r++) {
+        for (int c = 0; c < column; c++) {
+            T tmp = 0;
+            for (int i = 0; i < n; i++) {
+                tmp += first.get(r, i) * second.get(i, c);
+            }
+            result.set(r, c, tmp);
+        }
+    }
+
+    return result;
 }
 
 // overloading = assignment operator
@@ -171,5 +189,4 @@ void Matrix<T>::print() {
         }
         std::cout << std::endl;
     }
-    std::cout << "--------------------" << std::endl;
 }
